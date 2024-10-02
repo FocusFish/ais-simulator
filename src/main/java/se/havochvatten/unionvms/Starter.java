@@ -1,15 +1,20 @@
 package se.havochvatten.unionvms;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
+public class Starter {
 
-public class Starter extends HttpServlet {
+    public static void main(String[] args) throws InterruptedException {
+        Server server = new Server(Config.PORT);
+        Server configServer = new Server(Config.CONFIG_PORT);
+        System.out.println("Starting server...");
+        Thread serverThread = new Thread(server);
+        serverThread.start();
+        new Thread(configServer).start();
 
-    @Override
-    public void init(ServletConfig config) throws ServletException {
-    	Server server = new Server();
-    	System.out.println("Starting server..");
-        new Thread(server).start();
+        System.out.println("Server started with config: \nport=" + Config.PORT +
+                "\nconfigPort=" + Config.CONFIG_PORT +
+                "\nnth_pos=" + Config.getNthPos() +
+                "\nsim_file=" + Config.getSimFile() +
+                "\nsimulate_stuck_socket=" + Config.isSimulateStuckSocket());
+        serverThread.join();
     }
 }

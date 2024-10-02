@@ -6,23 +6,28 @@ import java.net.Socket;
 
 public class Server implements Runnable {
 
-	@Override
-	public void run() {
-		try {
-			ServerSocket serverSocket = new ServerSocket(8040);
-			while (true) {
-				Socket clientSocket = serverSocket.accept();
-				int nthPos = 1;
-				String ais_nth_pos_str = System.getProperty("ais_nth_pos");
-				if(ais_nth_pos_str != null) {
-					nthPos = Integer.parseInt(ais_nth_pos_str);
-				}
-				System.out.println("New client connected.. using nth_pos = " + nthPos);
-				new Thread(new Worker(clientSocket, nthPos)).start();
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+    private final int port;
 
+    public Server(int port) {
+        this.port = port;
+    }
+
+    @Override
+    public void run() {
+        try {
+            ServerSocket serverSocket = new ServerSocket(port);
+            while (true) {
+                Socket clientSocket = serverSocket.accept();
+                int nthPos = Config.getNthPos();
+                System.out.println("New client connected " + clientSocket + "... using nth_pos = " + nthPos);
+                if (port == Config.PORT) {
+                    new Thread(new Worker(clientSocket, nthPos)).start();
+                } else {
+                    new Thread(new ConfigWorker(clientSocket)).start();
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Got error in server: " + e.getLocalizedMessage());
+        }
+    }
 }

@@ -3,3 +3,4 @@ target
 *.csv
 .idea
 ais-simulator.iml
+dependency-reduced-pom.xml
