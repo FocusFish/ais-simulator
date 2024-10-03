@@ -21,7 +21,8 @@ Server listens on ports 8040 (ais data) and 8041 (configuration channel).
 Additional options can be supplied with `-D` flags, e.g. `java -Dais_nth_pos=3 -jar target/ais-simulator.jar`. See
 Options chapter for all options.
 
-Run Docker container with `docker run -d --name ais-simulator -p 8040:8040 -p 8041:8041  hav/ais-simulator:latest`.
+Run Docker container with
+`docker run -d --name ais-simulator -p 8040:8040 -p 8041:8041 --network uvms-test-net hav/ais-simulator:latest`.
 
 ### Options
 
